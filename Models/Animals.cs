@@ -19,6 +19,12 @@ namespace Projet_ecosysteme.Models
 
         private Random _random = new Random();
 
+        //Réserve d'energie
+        public double energy_reserve {get; set;}
+
+        //Points de vie 
+        public double points_life {get; set;}
+
         // Constructeur
         public Animals(int initialX, int initialY, Image animalImage)
         {
@@ -57,6 +63,10 @@ namespace Projet_ecosysteme.Models
             // Mettre à jour la position de l'image sur le Canvas
             Canvas.SetLeft(AnimalImage, XPosition);
             Canvas.SetTop(AnimalImage, YPosition);
+        }
+
+        public void Die(){
+            
         }
     }
 }
