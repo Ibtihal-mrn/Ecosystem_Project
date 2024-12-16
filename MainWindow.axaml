@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Projet_ecosysteme.MainWindow"
+        Title="Projet_ecosysteme"
+        Background="White">
+        <!-- Le conteneur grid permet s'adpate mieux aux changement de taille de la fenêtre. Donc si j'agrandis la taille de la fenêtre, l'image de fond grandit avec-->
+        <Grid > 
+                <Image Source = "/Assets/background.jpeg" Stretch = "Fill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />     
+
+                <Canvas x:Name="MyCanvas">
+                        <Rectangle x:Name="AnimalShape" Width="10" Height="10" Fill="black" />
+                </Canvas>
+   
+        </Grid>
+
+        
+</Window>
+
