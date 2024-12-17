@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Projet_ecosysteme.Models;
 using Avalonia.Media.Imaging;
+using System.Linq;
 
 namespace Projet_ecosysteme
 {
@@ -82,14 +83,28 @@ namespace Projet_ecosysteme
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
             timer.Tick += (sender, args) =>
             {
-                foreach (var animal in _animals_carnivores)
+                foreach (var animal in _animals_carnivores.ToList()) //Utiliser to list pour éviter les erreurs quand on retire les éléments d'une liste 
                 {
                     animal.Move(canvasWidth, canvasHeight);
+                    animal.UpdateLifeCycle();
+
+                    if (!animal.IsAlive){
+                        MyCanvas.Children.Remove(animal.AnimalImage);
+                        _animals_carnivores.Remove(animal);
+                        Console.WriteLine("Un carnivore est mort");
+                    }
                 }
 
-                foreach (var animal in _animals_herbivores)
+                foreach (var animal in _animals_herbivores.ToList())
                 {
                     animal.Move(canvasWidth, canvasHeight);
+                    animal.UpdateLifeCycle();
+
+                    if (!animal.IsAlive){
+                        MyCanvas.Children.Remove(animal.AnimalImage);
+                        _animals_herbivores.Remove(animal);
+                        Console.WriteLine("Un herbivore est mort");
+                    }
                 }
             };
             timer.Start();
