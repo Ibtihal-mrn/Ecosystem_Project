@@ -8,6 +8,10 @@ using Avalonia.Threading;
 using Projet_ecosysteme.Models;
 using Avalonia.Media.Imaging;
 using System.Linq;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+
+
 
 namespace Projet_ecosysteme
 {
@@ -15,6 +19,7 @@ namespace Projet_ecosysteme
     {
         private List<Animals> _animals_carnivores = new List<Animals>();
         private List<Animals> _animals_herbivores = new List<Animals>();
+        private List<Meat> _viande = new List<Meat>(); //Créer une liste dans laquelle on va transformer les animaux en viande
         private Random _random = new Random();
 
         public MainWindow()
@@ -39,75 +44,41 @@ namespace Projet_ecosysteme
             double canvasWidth = MyCanvas.Bounds.Width;
             double canvasHeight = MyCanvas.Bounds.Height;
 
-            // Créer des carnivores (ex. Puma)
-            for (int i = 0; i < 5; i++)
-            {
-                int x = (int)(_random.NextDouble() * canvasWidth);
-                int y = (int)(_random.NextDouble() * canvasHeight);
+            //Créer des carnivores
+            _animals_carnivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/Puma.png", MyCanvas);
 
-                // Créer une Image pour l'animal carnivore
-                var carnivoreImage = new Image
-                {
-                    Source = new Bitmap("Assets/Puma.png"), // Utilisez le chemin en string
-                    Width = 80,
-                    Height = 80
-                };
 
-                MyCanvas.Children.Add(carnivoreImage);
-
-                var animal_carnivore = new Animals(x, y, carnivoreImage);
-                _animals_carnivores.Add(animal_carnivore);
-            }
-
-            // Créer des herbivores (ex. Biche)
-            for (int i = 0; i < 5; i++)
-            {
-                int x = (int)(_random.NextDouble() * canvasWidth);
-                int y = (int)(_random.NextDouble() * canvasHeight);
-
-                // Créer une Image pour l'animal herbivore
-                var herbivoreImage = new Image
-                {
-                    Source = new Bitmap("Assets/mouton.png"), // Utilisez le chemin en string
-                    Width = 80,
-                    Height = 80
-                };
-
-                MyCanvas.Children.Add(herbivoreImage);
-
-                var animal_herbivore = new Animals(x, y, herbivoreImage);
-                _animals_herbivores.Add(animal_herbivore);
-            }
+            //Créer des herbivores
+            _animals_herbivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/mouton.png", MyCanvas);
 
             // Déplacer les animaux périodiquement
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
             timer.Tick += (sender, args) =>
             {
-                foreach (var animal in _animals_carnivores.ToList()) //Utiliser to list pour éviter les erreurs quand on retire les éléments d'une liste 
-                {
-                    animal.Move(canvasWidth, canvasHeight);
-                    animal.UpdateLifeCycle();
-
-                    if (!animal.IsAlive){
-                        MyCanvas.Children.Remove(animal.AnimalImage);
-                        _animals_carnivores.Remove(animal);
-                        Console.WriteLine("Un carnivore est mort");
-                    }
-                }
-
-                foreach (var animal in _animals_herbivores.ToList())
-                {
-                    animal.Move(canvasWidth, canvasHeight);
-                    animal.UpdateLifeCycle();
-
-                    if (!animal.IsAlive){
-                        MyCanvas.Children.Remove(animal.AnimalImage);
-                        _animals_herbivores.Remove(animal);
-                        Console.WriteLine("Un herbivore est mort");
-                    }
-                }
+                UpdateAnimals(_animals_carnivores);
+                UpdateAnimals(_animals_herbivores);          
             };
             timer.Start();
+        }
+
+        private void UpdateAnimals(List<Animals> animals)
+        {
+            foreach (var animal in animals.ToList())
+            {
+                animal.Move(MyCanvas.Bounds.Width, MyCanvas.Bounds.Height);
+                animal.UpdateLifeCycle();
+
+                if (!animal.IsAlive)
+                {
+                    var viande = animal.DieAndGenerateMeat(MyCanvas);
+                    if (viande != null)
+                    {
+                        _viande.Add(viande);
+                    }
+
+                    animals.Remove(animal);
+                }
+            }
         }
     }
 }

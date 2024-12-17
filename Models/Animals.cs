@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using System ; 
+using System.Collections.Generic;
+using Avalonia.Media.Imaging;
 
 namespace Projet_ecosysteme.Models
 {
@@ -99,6 +101,43 @@ namespace Projet_ecosysteme.Models
 
             IsAlive = false ; 
             Console.WriteLine("Un animal est mort");
+        }
+
+        public static List<Animals> GenerateAnimals(int count, double canvasWidth, double canvasHeight, string imagePath, Canvas canvas)
+        {
+            var random = new Random();
+            var animals = new List<Animals>();
+
+            for (int i = 0; i < count; i++)
+            {
+                int x = (int)(random.NextDouble() * canvasWidth);
+                int y = (int)(random.NextDouble() * canvasHeight);
+
+                var animalImage = new Image
+                {
+                    Source = new Bitmap(imagePath),
+                    Width = 80, 
+                    Height = 80
+                };
+
+                canvas.Children.Add(animalImage);
+
+                var animal = new Animals(x, y, animalImage);
+                animals.Add(animal);
+            }
+
+            return animals;
+        }
+
+        public Meat? DieAndGenerateMeat(Canvas canvas)
+        {
+            IsAlive = false;
+            canvas.Children.Remove(AnimalImage);
+            Console.WriteLine("Un animal est mort");
+
+            //Créer un morceau de viande à la position de l'animal
+            var viande = Meat.Create(XPosition, YPosition, canvas);
+            return viande;
         }
     }
 }
