@@ -11,14 +11,14 @@ using System.Linq;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-
-
 namespace Projet_ecosysteme
 {
     public partial class MainWindow : Window
     {
         private List<Animals> _animals_carnivores = new List<Animals>();
+        private List<Animals> _animals_carnivores_femelles = new List<Animals>();
         private List<Animals> _animals_herbivores = new List<Animals>();
+        private List<Animals> _animals_herbivores_femelles = new List<Animals>();
         private List<Meat> _viande = new List<Meat>(); //Créer une liste dans laquelle on va transformer les animaux en viande
         private Random _random = new Random();
 
@@ -46,17 +46,21 @@ namespace Projet_ecosysteme
 
             //Créer des carnivores
             _animals_carnivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/Puma.png", MyCanvas);
-
+            _animals_carnivores_femelles = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/chat.png", MyCanvas);
+            
 
             //Créer des herbivores
             _animals_herbivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/mouton.png", MyCanvas);
+            _animals_herbivores_femelles = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/biche.png", MyCanvas);
 
             // Déplacer les animaux périodiquement
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
             timer.Tick += (sender, args) =>
             {
                 UpdateAnimals(_animals_carnivores);
-                UpdateAnimals(_animals_herbivores);          
+                UpdateAnimals(_animals_carnivores_femelles);
+                UpdateAnimals(_animals_herbivores); 
+                UpdateAnimals(_animals_herbivores_femelles);        
             };
             timer.Start();
         }
