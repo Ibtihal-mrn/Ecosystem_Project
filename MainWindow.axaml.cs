@@ -96,6 +96,7 @@ namespace Projet_ecosysteme
                 var garbage = viande.CheckIfSpoiled(MyCanvas);
                 if (garbage != null)
                 {
+                    _viande.Remove(viande);
                     _garbage.Add(garbage);
                 }
             }

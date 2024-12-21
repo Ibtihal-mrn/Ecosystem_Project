@@ -18,9 +18,6 @@ namespace Projet_ecosysteme.Models
         public double XSpeed { get; set; }
         public double YSpeed { get; set; }
 
-        // Temps avant changement d'état
-        private double _timeToMove = 0;
-
         // Forme de l'animal (utilise une image maintenant)
         public Image AnimalImage { get; set; }
 
@@ -35,7 +32,7 @@ namespace Projet_ecosysteme.Models
         //Etat de l'animal : mort ou vivant (vivant par défaut)
         public bool IsAlive{get; private set;} = true;
         public bool IsCarnivore{get; set;}
-        public bool IsHerbivore{get; set;}
+        
         public bool IsFemale{get; set;}
 
         // Constructeur : je dois mettre en paramètre tout ce qui est nécessaire pour créer un animal : faire la différence entre carnivore et herbivore, males et femelles
@@ -56,7 +53,7 @@ namespace Projet_ecosysteme.Models
             Canvas.SetTop(AnimalImage, YPosition);
 
             //Fixer des valeurs pour les points de vie, et l'energie
-            EnergyReserve = _random.Next(100, 101);
+            EnergyReserve = _random.Next(100, 200);
             PointsLife = _random.Next(30, 61);
         }
 
@@ -77,18 +74,25 @@ namespace Projet_ecosysteme.Models
                     if (distance < thresholdDistance)
                     {
                         //Si l'animal est carnivore et que l'autre animal est herbivore : valabe pour les mâles et femelles 
-                        if ((this.IsCarnivore && otherAnimal.IsHerbivore)) 
+                        if (this.IsCarnivore && !otherAnimal.IsCarnivore)
                         {
+                            Console.WriteLine("Carnivore détecte herbivore à proximité");
                             //Le carnivore va poursuivre l'herbivore : on fait appel à la fonction pursue
-                            PursueAnimal(otherAnimal, allAnimals);
+                            HuntAnimal(otherAnimal);
                         }
 
-                        //Faire en sorte que les femelles d'une même espèce s'évitent, et les mâles d'une même espèce s'évitent donc ajouter condition pour être sûre qu'on a le comportement attendu
-                        if ((this.IsCarnivore && otherAnimal.IsCarnivore) || (this.IsHerbivore && otherAnimal.IsHerbivore)) 
+
+                        //Vérifier si l'espèce est la même
+                        if ((this.IsCarnivore && otherAnimal.IsCarnivore) || (!this.IsCarnivore && !otherAnimal.IsCarnivore)) 
                         {
-                            //Eviter la collision
-                            AvoidCollision(otherAnimal);
-                        }
+                            //Vérifier si on a un carnivore et un herbivore
+                            if ((this.IsFemale && !otherAnimal.IsFemale) || (!this.IsFemale && otherAnimal.IsFemale))
+                            {
+                                //Reproduction de l'animal
+                                ReproduceAnimal(otherAnimal);
+                            }
+                            
+                        }   
                     }
                 }
             }
@@ -116,55 +120,28 @@ namespace Projet_ecosysteme.Models
         }
 
         //Poursuivre l'animal : on prend en paramètre la proie qui correspond à otheranimal dans la méthode move
-        private void PursueAnimal(Animals prey, List<Animals> allAnimals)
+        // Cette méthode est appelée lorsque le carnivore est suffisamment proche de l'herbivore
+        private void HuntAnimal(Animals prey)
         {
-            // La durée de la poursuite (3 secondes)
-            int pursueTime = 3; // en secondes, tu peux le rendre variable si besoin
+            if (!prey.IsAlive) return; // Si la proie est déjà morte, ne rien faire
 
-            // Vérifier si le carnivore poursuit la proie
-            if (pursueTime > 0)
-            {
-                // Réduire le temps de poursuite
-                pursueTime -= 1;
+            // Le carnivore mange l'herbivore
+            prey.Die();  // L'herbivore meurt
 
-                // Calculer la direction vers l'herbivore
-                double deltaX = prey.XPosition - this.XPosition;
-                double deltaY = prey.YPosition - this.YPosition;
+            // Le carnivore gagne de l'énergie ou des points de vie
+            this.EnergyReserve += 20;  // Par exemple, on peut ajouter de l'énergie au carnivore
+            this.PointsLife += 5;      // Ajouter des points de vie
 
-                // Normaliser la direction pour que le carnivore se déplace correctement
-                double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-                if (distance > 0) // éviter la division par zéro
-                {
-                    deltaX /= distance;
-                    deltaY /= distance;
-                }
-
-                // Déplacement du carnivore vers l'herbivore
-                double moveSpeed = 0.1;  // Vitesse de déplacement, tu peux ajuster
-                this.XPosition += deltaX * moveSpeed;
-                this.YPosition += deltaY * moveSpeed;
-
-                // Si le temps de poursuite est écoulé
-                if (pursueTime <= 0)
-                {
-                    // L'herbivore disparaît
-                    allAnimals.Remove(prey);  // Méthode pour faire disparaître l'herbivore (à définir)
-                    Console.WriteLine("Un herbivore a été chassé");
-                }
-            }
-            
+            Console.WriteLine("Le carnivore a mangé l'herbivore et a gagné de l'énergie !");
         }
 
-        private void AvoidCollision(Animals otherAnimal)
-        {
-            // Si une collision est détectée et qu'ils ne sont pas carnivores / herbivores, on inverse la direction
-            XSpeed = -XSpeed;
-            YSpeed = -YSpeed;
 
-            // En option, on peut ajouter un petit facteur aléatoire pour rendre les mouvements moins prévisibles
-            XSpeed += _random.NextDouble() * 0.2 - 0.1; // Ajuste légèrement la direction
-            YSpeed += _random.NextDouble() * 0.2 - 0.1; // Ajuste légèrement la direction
+
+        private void ReproduceAnimal(Animals otherAnimal)
+        {
+
         }
+       
 
         //Mise à jour du cycle de vie
         public void UpdateLifeCycle(){

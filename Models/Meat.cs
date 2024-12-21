@@ -49,7 +49,7 @@ namespace Projet_ecosysteme.Models
                     canvas.Children.Remove(MeatImage);
                 }
                 
-                Console.WriteLine("La viande s'est transformée en déchet");
+                //Console.WriteLine("La viande s'est transformée en déchet");
                 return Garbage.Create(XPosition, YPosition, canvas);
             }
 
