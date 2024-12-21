@@ -11,6 +11,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
+
 namespace Projet_ecosysteme
 {
     public partial class MainWindow : Window
@@ -21,6 +22,7 @@ namespace Projet_ecosysteme
         private List<Animals> _animals_herbivores_femelles = new List<Animals>();
         private List<Meat> _viande = new List<Meat>(); //Créer une liste dans laquelle on va transformer les animaux en viande
         private Random _random = new Random();
+        private List<Garbage> _garbage = new List<Garbage>();
 
         public MainWindow()
         {
@@ -45,13 +47,13 @@ namespace Projet_ecosysteme
             double canvasHeight = MyCanvas.Bounds.Height;
 
             //Créer des carnivores
-            _animals_carnivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/Puma.png", MyCanvas);
-            _animals_carnivores_femelles = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/chat.png", MyCanvas);
+            _animals_carnivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/Puma.png", MyCanvas, true, false);
+            _animals_carnivores_femelles = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/chat.png", MyCanvas, true, false);
             
 
             //Créer des herbivores
-            _animals_herbivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/mouton.png", MyCanvas);
-            _animals_herbivores_femelles = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/biche.png", MyCanvas);
+            _animals_herbivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/mouton.png", MyCanvas, false, false);
+            _animals_herbivores_femelles = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/biche.png", MyCanvas, false, true);
 
             // Déplacer les animaux périodiquement
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
@@ -69,8 +71,12 @@ namespace Projet_ecosysteme
         {
             foreach (var animal in animals.ToList())
             {
-                animal.Move(MyCanvas.Bounds.Width, MyCanvas.Bounds.Height);
+                animal.Move(MyCanvas.Bounds.Width, MyCanvas.Bounds.Height, _animals_carnivores.Concat(_animals_carnivores_femelles).Concat(_animals_herbivores).Concat(_animals_herbivores_femelles).ToList() );
                 animal.UpdateLifeCycle();
+
+                //Manger la viande si assez proche
+                animal.Eat(_viande, MyCanvas); //On passe la liste de viande à la fonction qui doit justement prendre une liste en paramètre
+
 
                 if (!animal.IsAlive)
                 {
@@ -81,6 +87,16 @@ namespace Projet_ecosysteme
                     }
 
                     animals.Remove(animal);
+                }
+            }
+
+            //Vérification de la viande pour la tranformer en déchet
+            foreach (var viande in _viande.ToList())
+            {
+                var garbage = viande.CheckIfSpoiled(MyCanvas);
+                if (garbage != null)
+                {
+                    _garbage.Add(garbage);
                 }
             }
         }
