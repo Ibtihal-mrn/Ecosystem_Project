@@ -22,17 +22,15 @@ namespace Projet_ecosysteme.Models
 
         private Random _random = new Random();
 
-        //Réserve d'energie
+        //Réserve d'energie et points de vies
         public double EnergyReserve {get; set;}
-        //Points de vie 
         public double PointsLife {get; set;}
 
-        //Etat de l'animal : mort ou vivant (vivant par défaut)
+        //Etat de l'animal : mort ou vivant (vivant par défaut) et carnivore ou herbivore
         public bool IsAlive{get; private set;} = true;
         public bool IsCarnivore{get; set;}
 
-        // Constructeur : je dois mettre en paramètre tout ce qui est nécessaire pour créer un animal : faire la différence entre carnivore et herbivore, males et femelles
-        // Par défaut, un animal sera herbivore et mâle
+        // Par défaut, un animal sera herbivore
         public Animals(int initialX, int initialY, Image animalImage, bool isCarnivore = false)
         {
             XPosition = initialX;
@@ -40,7 +38,6 @@ namespace Projet_ecosysteme.Models
             AnimalImage = animalImage;
             IsCarnivore = isCarnivore;
             
-
             XSpeed = _random.NextDouble() * 2 - 1;
             YSpeed = _random.NextDouble() * 2 - 1;
 
@@ -50,10 +47,10 @@ namespace Projet_ecosysteme.Models
 
             //Fixer des valeurs pour les points de vie, et l'energie
             EnergyReserve = _random.Next(100, 200);
-            PointsLife = _random.Next(30, 61);
+            PointsLife = _random.Next(30, 60);
         }
 
-        //Pour gérer le déplacement, on a besoin des dimensions du canvas, et de la list de tous les animaux
+        //Pour gérer le déplacement, on a besoin des dimensions du canvas, et de la liste de tous les animaux
         public void Move(double canvasWidth, double canvasHeight, List<Animals> allAnimals)
         {   
             //On parcourt la liste de tous les animaux 
@@ -62,9 +59,9 @@ namespace Projet_ecosysteme.Models
                 // On s'assure qu'on compare pas un animal avec lui même
                 if(otherAnimal != this)
                 {
-                    //Calculer la distance qui séparer deux animaux
+                    //Calculer la distance qui séparer deux animaux ==> Gestion de la zone
                     double distance = Math.Sqrt(Math.Pow(this.XPosition - otherAnimal.XPosition, 2) + Math.Pow(this.YPosition - otherAnimal.YPosition, 2));
-                    double thresholdDistance = 50;
+                    double thresholdDistance = 30;
 
                     //On fixe une distance de référence selon laquelle on va ajuster le comportemetn
                     if (distance < thresholdDistance)
@@ -73,19 +70,19 @@ namespace Projet_ecosysteme.Models
                         if (this.IsCarnivore && !otherAnimal.IsCarnivore)
                         {
                             Console.WriteLine("Carnivore détecte herbivore à proximité");
-                            //Le carnivore va poursuivre l'herbivore : on fait appel à la fonction pursue
+                            //Le carnivore va chasser l'herbivore
                             HuntAnimal(otherAnimal);
                         }
                         
                     }
                 }
             }
+
             // La position est mise à jour en fonction de la vitesse 
             XPosition += XSpeed;
             YPosition += YSpeed;
 
             // Permet de gérer les bords de la fenêtre pour éviter que l'animal ne sorte
-            // Dans mon cas, l'animal rebondit, mais je peux changer la logique pour le faire réapparaître de l'autre côté.
             if (XPosition <= 0 || XPosition >= canvasWidth - AnimalImage.Width)
             {
                 XSpeed = -XSpeed;
@@ -103,8 +100,7 @@ namespace Projet_ecosysteme.Models
             Canvas.SetTop(AnimalImage, YPosition);
         }
 
-        //Poursuivre l'animal : on prend en paramètre la proie qui correspond à otheranimal dans la méthode move
-        // Cette méthode est appelée lorsque le carnivore est suffisamment proche de l'herbivore
+        //Chasser l'herbivore
         private void HuntAnimal(Animals prey)
         {
             if (!prey.IsAlive) return; // Si la proie est déjà morte, ne rien faire
@@ -131,7 +127,7 @@ namespace Projet_ecosysteme.Models
             if (EnergyReserve <= 0){
                 //Si y'a plus d'energie, convertir les points en energie
                 //Il faudra modifier la logique de calcul ici 
-                EnergyReserve = 0;
+                EnergyReserve = EnergyReserve;
                 PointsLife -= 0.5;
             }
 

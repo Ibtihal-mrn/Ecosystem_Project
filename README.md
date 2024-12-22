@@ -30,6 +30,7 @@ Les animaux ont également deux zones : la zone de contact, et la zone de vision
 
 ### Animaux
 
+
 ## Gestion de l'alimentation
 
 Afin de rallonger le cycle de vie d'un être vivant, il faut qu'il puisse gagner en énergie, mais comment ? En étant capable de se nourir, tout simplement. 
