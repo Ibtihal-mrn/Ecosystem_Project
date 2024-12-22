@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Avalonia.Media.Imaging;
 using System.Linq;
 using System.Threading.Tasks;
+using Projet_ecosysteme.Models;
 
 namespace Projet_ecosysteme.Models
 {
@@ -33,17 +34,16 @@ namespace Projet_ecosysteme.Models
         public bool IsAlive{get; private set;} = true;
         public bool IsCarnivore{get; set;}
         
-        public bool IsFemale{get; set;}
 
         // Constructeur : je dois mettre en paramètre tout ce qui est nécessaire pour créer un animal : faire la différence entre carnivore et herbivore, males et femelles
         // Par défaut, un animal sera herbivore et mâle
-        public Animals(int initialX, int initialY, Image animalImage, bool isCarnivore = false, bool isFemale = false )
+        public Animals(int initialX, int initialY, Image animalImage, bool isCarnivore = false)
         {
             XPosition = initialX;
             YPosition = initialY;
             AnimalImage = animalImage;
             IsCarnivore = isCarnivore;
-            IsFemale = isFemale;
+            
 
             XSpeed = _random.NextDouble() * 2 - 1;
             YSpeed = _random.NextDouble() * 2 - 1;
@@ -80,19 +80,7 @@ namespace Projet_ecosysteme.Models
                             //Le carnivore va poursuivre l'herbivore : on fait appel à la fonction pursue
                             HuntAnimal(otherAnimal);
                         }
-
-
-                        //Vérifier si l'espèce est la même
-                        if ((this.IsCarnivore && otherAnimal.IsCarnivore) || (!this.IsCarnivore && !otherAnimal.IsCarnivore)) 
-                        {
-                            //Vérifier si on a un carnivore et un herbivore
-                            if ((this.IsFemale && !otherAnimal.IsFemale) || (!this.IsFemale && otherAnimal.IsFemale))
-                            {
-                                //Reproduction de l'animal
-                                ReproduceAnimal(otherAnimal);
-                            }
-                            
-                        }   
+                        
                     }
                 }
             }
@@ -135,13 +123,40 @@ namespace Projet_ecosysteme.Models
             Console.WriteLine("Le carnivore a mangé l'herbivore et a gagné de l'énergie !");
         }
 
+        // public void ReproduceAnimal(List<Animals> allAnimals, Canvas MyCanvas)
+        // {
+        //     foreach (var otherAnimal in allAnimals)
+        //     {
+        //         if(otherAnimal != this)
+        //         {
+        //             //Calculer la distance qui séparer deux animaux
+        //             double distance = Math.Sqrt(Math.Pow(this.XPosition - otherAnimal.XPosition, 2) + Math.Pow(this.YPosition - otherAnimal.YPosition, 2));
+        //             double thresholdDistance = 50;
 
 
-        private void ReproduceAnimal(Animals otherAnimal)
-        {
+        //             //Vérifier si on a un carnivore et un herbivore
+        //             if ((this.IsCarnivore && otherAnimal.IsCarnivore) || (!this.IsCarnivore && !otherAnimal.IsCarnivore)) 
+        //             {
+        //                 double PositionX = (this.XPosition+otherAnimal.XPosition)/2;
+        //                 double PositionY = (this.YPosition+otherAnimal.YPosition)/2;
 
-        }
-       
+        //                 if(this.IsCarnivore)
+        //                 {
+        //                     string imagePath = "Assets/Puma.png";
+        //                     GenerateAnimals(1, PositionX, PositionY, imagePath, MyCanvas, this.isCarnivore);
+
+        //                 }
+
+        //                 if(!this.IsCarnivore)
+        //                 {
+        //                     string imagePath = "Assets/mouton.png";
+        //                     GenerateAnimals(1, PositionX, PositionY, imagePath, MyCanvas, this.isCarnivore);
+
+        //                 }
+        //             }   
+        //         }
+        //     }  
+        // }
 
         //Mise à jour du cycle de vie
         public void UpdateLifeCycle(){
@@ -172,7 +187,7 @@ namespace Projet_ecosysteme.Models
             Console.WriteLine("Un animal est mort");
         }
 
-        public static List<Animals> GenerateAnimals(int count, double canvasWidth, double canvasHeight, string imagePath, Canvas canvas, bool isCarnivore, bool isFemale)
+        public static List<Animals> GenerateAnimals(int count, double canvasWidth, double canvasHeight, string imagePath, Canvas canvas, bool isCarnivore)
         {
             var random = new Random();
             var animals = new List<Animals>();
@@ -191,7 +206,7 @@ namespace Projet_ecosysteme.Models
 
                 canvas.Children.Add(animalImage);
 
-                var animal = new Animals(x, y, animalImage, isCarnivore, isFemale);
+                var animal = new Animals(x, y, animalImage, isCarnivore);
                 animals.Add(animal);
             }
 
@@ -228,6 +243,23 @@ namespace Projet_ecosysteme.Models
                 }
             }
         }
+
+        // public void EatPants(List<Plante> plantes, Canvas canvas){
+
+        //     foreach (var plante in plantes.ToList())
+        //     {
+        //         if (IsCarnivore) return ; 
+
+        //         double distance = Math.Sqrt(Math.Pow(this.XPosition - plante.PositionX, 2) + Math.Pow(this.YPosition - plante.PositionY, 2));
+
+        //         if (distance < 50)
+        //         {
+        //             this.EnergyReserve += 10;
+        //             plantes.Remove(plante);
+        //             canvas.Children.Remove(plante.)
+        //         }
+        //     }
+        // }
 
         public void UpdateMeatLifecycle(List<Meat> meats, List<Garbage> garbages, Canvas canvas)
         {

@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Projet_ecosysteme.MainWindow"
         Title="Projet_ecosysteme"
-        Background="#472E06">
+        Background="#5E3C06">
         <!-- Le conteneur grid permet s'adpate mieux aux changement de taille de la fenêtre. Donc si j'agrandis la taille de la fenêtre, l'image de fond grandit avec-->
         <Grid > 
                 <!--<Image Source = "/Assets/background.jpeg" Stretch = "Fill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />     -->
