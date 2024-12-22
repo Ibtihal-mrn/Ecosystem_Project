@@ -244,6 +244,26 @@ namespace Projet_ecosysteme.Models
             }
         }
 
+        public void EatPlante(List<Plante> plantes, Canvas canvas)
+        {
+            // Parcourir la liste de viande
+            foreach (var plante in plantes.ToList())
+            {
+                if (IsCarnivore) return ; //Si il n'est pas carnivore, fait rien
+
+                double distance = Math.Sqrt(Math.Pow(this.XPosition - plante.PositionX, 2) + Math.Pow(this.YPosition - plante.PositionY, 2));
+
+                if (distance < 50)
+                {
+                    if(plante.Vies > 0)
+                    {
+                        this.EnergyReserve += 10;
+                        plantes.Remove(plante);
+                    }
+                    Console.WriteLine("L'animal a mangé une plante!");
+                }
+            }
+        }
         // public void EatPants(List<Plante> plantes, Canvas canvas){
 
         //     foreach (var plante in plantes.ToList())

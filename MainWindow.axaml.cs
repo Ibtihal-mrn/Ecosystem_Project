@@ -127,7 +127,7 @@ namespace Projet_ecosysteme
             _animals_carnivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/Puma.png", MyCanvas, true);
 
             // Créer des herbivores
-            _animals_herbivores = Animals.GenerateAnimals(5, canvasWidth, canvasHeight, "Assets/mouton.png", MyCanvas, false);
+            _animals_herbivores = Animals.GenerateAnimals(15, canvasWidth, canvasHeight, "Assets/mouton.png", MyCanvas, false);
 
             // Déplacer les animaux périodiquement
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
@@ -148,6 +148,8 @@ namespace Projet_ecosysteme
 
                 // Manger la viande si assez proche
                 animal.Eat(_viande, MyCanvas);
+                animal.EatPlante(ecosysteme.Plantes, MyCanvas);
+                
 
                 if (!animal.IsAlive)
                 {
