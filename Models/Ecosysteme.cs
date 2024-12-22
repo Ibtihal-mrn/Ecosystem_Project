@@ -37,7 +37,7 @@ namespace Projet_ecosysteme.Models
                 if (Plantes.Count == 0) return;
 
                 // Calcule le nombre de plantes à reproduire (2/3 du total)
-                int nombreDePlantesAReproduire = (Plantes.Count * 2) / 3;
+                int nombreDePlantesAReproduire = Plantes.Count / 4;
 
                 // Sélectionne les plantes éligibles (avec énergie suffisante, non récemment reproduites)
                 var indicesDisponibles = Plantes

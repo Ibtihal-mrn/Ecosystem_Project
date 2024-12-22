@@ -39,11 +39,11 @@ namespace Projet_ecosysteme
                 InitialiserEcosysteme();
                 MettreAJourAffichage();
 
-                reproductionTimer = new Timer(10000);
+                reproductionTimer = new Timer(2000);
                 reproductionTimer.Elapsed += OnReproductionTimerElapsed;
                 reproductionTimer.Start();
 
-                energieTimer = new Timer(1000);
+                energieTimer = new Timer(500);
                 energieTimer.Elapsed += OnEnergieTimerElapsed;
                 energieTimer.Start();
             };
@@ -51,10 +51,14 @@ namespace Projet_ecosysteme
 
         private void InitialiserEcosysteme()
         {
-            while (ecosysteme.Plantes.Count < 6)
+            // Obtenir la largeur et la hauteur actuelles de la fenêtre
+            double canvasWidth = MyCanvas.Bounds.Width;
+            double canvasHeight = MyCanvas.Bounds.Height;
+
+            while (ecosysteme.Plantes.Count < 20)
             {
-                int positionX = random.Next(0, 800);
-                int positionY = random.Next(0, 450);
+                int positionX = random.Next(0, (int)canvasWidth);
+                int positionY = random.Next(0, (int)canvasHeight);
                 var plante = new Plante(positionX, positionY, 10, 50);
                 ecosysteme.AjouterPlante(plante);
             }
