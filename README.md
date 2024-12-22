@@ -4,13 +4,13 @@ Le but de ce projet est de simuler un écosystème simplifier capable de gérer 
 
 Les animaux doivent être capable de se reproduire, de se nourir, de chasser (pour les carnivores), mais également de mourir et de se décomposer. 
 
-Les plantes, quant elles, doivent également être en mesure de se reproduire, de se nourir de déchets organiques, et d'être mangées par des herbivores. 
+Les plantes, quant à elles, doivent également être en mesure de se reproduire, de se nourir de déchets organiques, et d'être mangées par des herbivores. 
 
-Pour information, le travail a été séparé en deux. Ibtihal s'est chargé de tout ce qui est lié à l'implémentation du comportement animal, et Imane s'est chargé de l'implémentation du comportement des végétaux. C'est la raison pour laquelle les logiques d'implémentation utilisées ne sont pas toujours les mêmes pour un comportement similaires. Idéalement, il aurait mieux fallu homogénéiser le code, mais faute de temps, nous nous sommes contentées de mettre en commun nos codes. 
+Pour information, le travail a été séparé en deux. Ibtihal s'est chargé de tout ce qui est lié à l'implémentation du comportement animal, et Imane s'est chargé de l'implémentation du comportement des végétaux. C'est la raison pour laquelle les logiques d'implémentation utilisées ne sont pas toujours les mêmes pour un comportement similaire. Idéalement, il aurait mieux fallu homogénéiser le code, mais faute de temps, nous nous sommes contentées de mettre en commun nos codes. 
 
 ## Gestion des points de vie et d'Energie
 
-Afin de gérer le cycle de vie des êtres vivants de l'écosystème, un système a été mis en place basée sur la gestion d'une quantité d'energie initiale, et d'un certains nombre de points de vie. 
+Afin de gérer le cycle de vie des êtres vivants de l'écosystème, un système a été mis en place basé sur la gestion d'une quantité d'energie initiale, et d'un certains nombre de points de vie. 
 
 Le principe est le suivant : au fur et à mesure que le temps passe, l'energie d'un être vivant baisse. Une fois qu'il n'a plus d'energie, ses points de vie se transformes en énergie, et il finit par mourir une fois qu'il a consommé toutes ses réserves. 
 

@@ -1,4 +1,3 @@
-
 namespace Projet_ecosysteme.Models
 {
     public class Plante

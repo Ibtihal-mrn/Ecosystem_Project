@@ -1,8 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
-using Avalonia.Media;
 using System ;
-using System.Net.NetworkInformation;
 
 namespace Projet_ecosysteme.Models
 {
