@@ -73,7 +73,6 @@ namespace Projet_ecosysteme.Models
                             //Le carnivore va chasser l'herbivore
                             HuntAnimal(otherAnimal);
                         }
-                        
                     }
                 }
             }
@@ -100,6 +99,7 @@ namespace Projet_ecosysteme.Models
             Canvas.SetTop(AnimalImage, YPosition);
         }
 
+        
         //Chasser l'herbivore
         private void HuntAnimal(Animals prey)
         {
@@ -138,7 +138,7 @@ namespace Projet_ecosysteme.Models
         }
 
         //Faire en sorte que l'animal disparaissent une fois que il a plus de points de vies
-        public void Die(){
+        private void Die(){
 
             IsAlive = false ; 
             Console.WriteLine("Un animal est mort");
@@ -201,7 +201,7 @@ namespace Projet_ecosysteme.Models
             }
         }
 
-        public void EatPlante(List<Plante> plantes, Canvas canvas)
+        public void EatPlante(List<Plante> plantes)
         {
             // Parcourir la liste de viande
             foreach (var plante in plantes.ToList())
@@ -222,17 +222,6 @@ namespace Projet_ecosysteme.Models
             }
         }
         
-        public void UpdateMeatLifecycle(List<Meat> meats, List<Garbage> garbages, Canvas canvas)
-        {
-            foreach (var meat in meats.ToList()) // Utilise ToList() pour éviter les modifications de la liste pendant l'itération
-            {
-                var garbage = meat.CheckIfSpoiled(canvas);
-                if (garbage != null)
-                {
-                    meats.Remove(meat);
-                    garbages.Add(garbage);
-                }
-            }
-        }
+        
     }
 }

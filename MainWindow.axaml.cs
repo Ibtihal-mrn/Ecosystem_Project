@@ -15,7 +15,7 @@ namespace Projet_ecosysteme
         private List<Animals> _animals_herbivores = new List<Animals>();
         private List<Meat> _viande = new List<Meat>();
         private List<Garbage> _garbage = new List<Garbage>();
-        private Projet_ecosysteme.Models.Ecosysteme ecosysteme;
+        private Ecosysteme ecosysteme;
         private Bitmap planteImage;
         private Bitmap planteEnDechetOrgImage;
         private readonly Random random = new Random();
@@ -152,7 +152,7 @@ namespace Projet_ecosysteme
 
                 // Manger la viande si assez proche
                 animal.Eat(_viande, MyCanvas);
-                animal.EatPlante(ecosysteme.Plantes, MyCanvas);
+                animal.EatPlante(ecosysteme.Plantes);
                 
 
                 if (!animal.IsAlive)
