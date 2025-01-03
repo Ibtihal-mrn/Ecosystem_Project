@@ -69,7 +69,6 @@ namespace Projet_ecosysteme.Models
                         //Si l'animal est carnivore et que l'autre animal est herbivore : valabe pour les mâles et femelles 
                         if (this.IsCarnivore && !otherAnimal.IsCarnivore)
                         {
-                            Console.WriteLine("Carnivore détecte herbivore à proximité");
                             //Le carnivore va chasser l'herbivore
                             HuntAnimal(otherAnimal);
                         }
@@ -110,9 +109,7 @@ namespace Projet_ecosysteme.Models
 
             // Le carnivore gagne de l'énergie ou des points de vie
             this.EnergyReserve += 20;  // Par exemple, on peut ajouter de l'énergie au carnivore
-            this.PointsLife += 5;      // Ajouter des points de vie
-
-            Console.WriteLine("Le carnivore a mangé l'herbivore et a gagné de l'énergie !");
+        
         }
 
         //Mise à jour du cycle de vie
@@ -121,12 +118,11 @@ namespace Projet_ecosysteme.Models
             //Si l'animal est mort, on fait rien pour l'instant
             if (!IsAlive) return ; 
 
-            //Réducation progressive de l'energie
+            //Réduction progressive de l'energie
             EnergyReserve -= 0.1;
 
             if (EnergyReserve <= 0){
-                //Si y'a plus d'energie, convertir les points en energie
-                //Il faudra modifier la logique de calcul ici 
+                //Si y'a plus d'energie, il puise de l'energie dans ses points de vie 
                 EnergyReserve = EnergyReserve;
                 PointsLife -= 0.5;
             }
@@ -141,7 +137,6 @@ namespace Projet_ecosysteme.Models
         private void Die(){
 
             IsAlive = false ; 
-            Console.WriteLine("Un animal est mort");
         }
 
         public static List<Animals> GenerateAnimals(int count, double canvasWidth, double canvasHeight, string imagePath, Canvas canvas, bool isCarnivore)
@@ -174,7 +169,6 @@ namespace Projet_ecosysteme.Models
         {
             IsAlive = false;
             canvas.Children.Remove(AnimalImage);
-            Console.WriteLine("Un animal est mort");
 
             //Créer un morceau de viande à la position de l'animal
             var viande = Meat.Create(XPosition, YPosition, canvas);
@@ -196,7 +190,6 @@ namespace Projet_ecosysteme.Models
 
                     viandes.Remove(viande);
                     canvas.Children.Remove(viande.MeatImage);
-                    Console.WriteLine("L'animal a mangé la viande !");
                 }
             }
         }
@@ -217,7 +210,6 @@ namespace Projet_ecosysteme.Models
                         this.EnergyReserve += 10;
                         plantes.Remove(plante);
                     }
-                    Console.WriteLine("L'animal a mangé une plante!");
                 }
             }
         }

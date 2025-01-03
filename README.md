@@ -10,13 +10,13 @@ Pour information, le travail a été séparé en deux. Ibtihal s'est chargé de 
 
 ## Diagrammes 
 
-### Diagramme de classes
+### Diagramme de classe
 
-![Diagramme de classes](Diagrammes/Diagramme_de_classe.png)
+![Diagramme de classe](Diagrammes/Diagramme_de_classe.png)
 
-### Diagramme de d'activité
+### Diagramme d'activité
 
-![Diagramme d'activités](Diagrammes/Diagramme_activités.png)
+![Diagramme d'activité](Diagrammes/Diagramme_activités.png)
 
 ### Diagramme de séquence
 
